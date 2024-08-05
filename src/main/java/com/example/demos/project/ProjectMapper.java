@@ -31,10 +31,11 @@ public class ProjectMapper {
     }
 
     public void updateProject(Project project, ProjectRequest request) {
-        project.setName(request.location());
+        project.setName(request.name());
         project.setDescription(request.description());
         project.setLocation(request.location());
         project.setEnd_date(request.endDate());
+        project.setStatus(request.status());
 
     }
     public void updateProjectStatus(Project project, String status) {

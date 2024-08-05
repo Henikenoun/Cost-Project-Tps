@@ -1,6 +1,5 @@
 package com.example.demos;
 
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -20,6 +19,7 @@ public class DemosApplication {
 		SpringApplication.run(DemosApplication.class, args);
 		System.out.println("hello world");
 	}
+
 	@Bean
 	public CommandLineRunner runner(RoleRepository roleRepository) {
 		return args -> {

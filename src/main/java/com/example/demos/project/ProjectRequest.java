@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 public record ProjectRequest(
+  Integer id,
         @NotBlank(message ="101")
         String name,
 

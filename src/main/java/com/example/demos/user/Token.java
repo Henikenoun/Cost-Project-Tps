@@ -2,6 +2,8 @@ package com.example.demos.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
@@ -25,7 +27,8 @@ public class Token
     private LocalDateTime expiresAt;
     private LocalDateTime validatedAt;
     @ManyToOne
-    @JoinColumn(name="userId",nullable=false)
+    @JoinColumn(name="userId", nullable=false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
 }

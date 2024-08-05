@@ -1,10 +1,12 @@
 package com.example.demos.project;
 
+import com.example.demos.user.User;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,5 +24,5 @@ public class ProjectResponse {
     private Integer budget;
     private String status;
     private String location;
-
+    private List<User> users;
 }

@@ -3,6 +3,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "DemosApplication",
+      "request": "launch",
+      "mainClass": "com.example.demos.DemosApplication",
+      "projectName": "demos"
+    },
+    {
       "name": "ng serve",
       "type": "chrome",
       "request": "launch",

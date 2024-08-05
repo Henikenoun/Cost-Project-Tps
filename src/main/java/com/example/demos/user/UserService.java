@@ -16,11 +16,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
-
+    private final TokenRepository tokenRepository;
 
     public User getUserById(Integer id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public List<User> getAllUsers() {
@@ -33,8 +36,8 @@ public class UserService {
         if (updatedUser.getFirstname() != null) {
             user.setFirstname(updatedUser.getFirstname());
         }
-        if (updatedUser.getLasttname() != null) {
-            user.setLasttname(updatedUser.getLasttname());
+        if (updatedUser.getLastname() != null) {
+            user.setLastname(updatedUser.getLastname());
         }
         if (updatedUser.getDateOfBirth() != null) {
             user.setDateOfBirth(updatedUser.getDateOfBirth());
@@ -45,6 +48,7 @@ public class UserService {
 
         return userRepository.save(user);
     }
+
     @Transactional
     public User changeUserRole(Integer userId, Integer roleId) {
         Optional<User> userOptional = userRepository.findById(userId);
@@ -60,9 +64,13 @@ public class UserService {
 
         throw new IllegalArgumentException("User or Role not found");
     }
-    public void deleteUser(Integer id) {
-        userRepository.deleteById(id);
-    }
 
+    @Transactional
+    public void deleteUser(Integer userId) {
+
+        tokenRepository.deleteByUserId(userId);
+
+        userRepository.deleteById(userId);
+    }
 
 }

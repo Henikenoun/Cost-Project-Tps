@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    
+
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
@@ -39,6 +39,7 @@ public class ProductService {
     }
 
     public List<ProductResponse> findAllProducts(int page, int size, Authentication connectedUser) {
+        System.out.println(connectedUser.getPrincipal());
         Pageable pageable = PageRequest.of(page, size, Sort.by("type").descending());
         Page<Product> products = productRepository.findAll(pageable);
         return products
@@ -47,13 +48,14 @@ public class ProductService {
                 .toList();
     }
 
-    public Integer updateProduct(ProductRequest request, Integer productId){
+    public Integer updateProduct(ProductRequest request, Integer productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));
         productMapper.updateProduct(product, request);
         Product updatedProject = productRepository.save(product);
         return updatedProject.getId();
     }
+
     public void deleteProduct(Integer productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID: " + productId));

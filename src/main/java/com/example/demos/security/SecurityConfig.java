@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)  // Désactive la protection CSRF (Cross-Site Request Forgery)
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(
+                            "/presence/**",
                                         "/projects/**",
                                         "/roles/**",
                                         "/users/**",

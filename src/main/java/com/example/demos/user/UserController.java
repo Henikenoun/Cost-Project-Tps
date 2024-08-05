@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
+import java.util.Optional;
 
 @RestController
 @RequestMapping("users")
@@ -30,9 +30,15 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(
-            @PathVariable Integer id
-    ) {
+            @PathVariable Integer id) {
         User user = userService.getUserById(id);
+        return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Optional<User>> getUserByEmail(
+            @PathVariable String email) {
+        Optional<User> user = userService.getUserByEmail(email);
         return ResponseEntity.ok(user);
     }
 
@@ -45,16 +51,15 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(
             @PathVariable Integer id,
-            @RequestBody @Valid User user
-    ) {
+            @RequestBody @Valid User user) {
         User updatedUser = userService.updateUser(id, user);
         return ResponseEntity.ok(updatedUser);
     }
+
     @PutMapping("/{userId}/roles/{roleId}")
     public ResponseEntity<User> changeUserRole(
             @PathVariable Integer userId,
-            @PathVariable Integer roleId
-    ) {
+            @PathVariable Integer roleId) {
         User updatedUser = userService.changeUserRole(userId, roleId);
         return ResponseEntity.ok(updatedUser);
     }
@@ -62,8 +67,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(
-            @PathVariable Integer id
-    ) {
+            @PathVariable Integer id) {
         userService.deleteUser(id);
     }
 }

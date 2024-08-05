@@ -36,7 +36,7 @@ public class ProjectController {
         return ResponseEntity.ok(service.findAllProjects(page,size,connectedUser));
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Integer> updateProject(
             @Valid @RequestBody ProjectRequest request ,
             @PathVariable("id") Integer id
@@ -44,7 +44,7 @@ public class ProjectController {
         return ResponseEntity.ok(service.updateProject(request,id));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/status/{id}")
     public ResponseEntity<Integer> updateProjectStatus(
             @Valid @RequestBody String status ,
             @PathVariable("id") Integer id

@@ -1,6 +1,8 @@
 package com.example.demos.user;
 
 import com.example.demos.project.Project;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -33,7 +35,7 @@ public class User implements UserDetails, Principal {
     @GeneratedValue
     private Integer id;
     private String firstname;
-    private String lasttname;
+    private String lastname;
     private LocalDate dateOfBirth;
     @Column(unique = true)
     private String email;
@@ -44,7 +46,14 @@ public class User implements UserDetails, Principal {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
-    @ManyToMany(fetch = FetchType.EAGER)
+
+    @ManyToMany
+    @JoinTable(
+      name = "project_user",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    @JsonIgnoreProperties("users")
     private List<Project> projects;
 
     @CreatedDate
@@ -97,6 +106,6 @@ public class User implements UserDetails, Principal {
     }
 
     public String fullName() {
-        return firstname+" "+lasttname;
+        return firstname+" "+lastname;
     }
 }

@@ -54,7 +54,6 @@ public class Project {
     private String location;
 
     @ManyToMany(mappedBy = "projects")
-    @JsonIgnore
     private List<User> users;
 
     @OneToMany(mappedBy = "project")

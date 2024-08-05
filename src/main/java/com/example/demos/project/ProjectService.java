@@ -22,12 +22,12 @@ public class ProjectService {
 
     private final ProjectMapper projectMapper;
     private final ProjectRepository projectRepository;
-    private final UserRepository userRepository ;
+    private final UserRepository userRepository;
 
     public Integer save(ProjectRequest request, Authentication connectedUser) {
         // Get the authenticated user
         // User user = (User) connectedUser.getPrincipal();
-
+        System.out.println(connectedUser);
         // Map the request to a Project entity
         Project project = projectMapper.toProject(request);
 
@@ -36,13 +36,15 @@ public class ProjectService {
 
         // Find all users by their IDs from the request
         List<User> users = userRepository.findAllById(request.userIds());
-        /*if (users == null || users.isEmpty()) {
-            throw new IllegalArgumentException("No users found with the provided IDs.");
-        }*/
+        /*
+         * if (users == null || users.isEmpty()) {
+         * throw new IllegalArgumentException("No users found with the provided IDs.");
+         * }
+         */
 
         // Print user information for debugging
         for (User u : users) {
-            System.out.println("User ID: " + u.getId() + ", Name: " + u.getFirstname() + " " + u.getLasttname());
+            System.out.println("User ID: " + u.getId() + ", Name: " + u.getFirstname() + " " + u.getLastname());
         }
 
         // Set the users for the project
@@ -85,21 +87,22 @@ public class ProjectService {
         if (userOpt.isPresent() && projectOpt.isPresent()) {
             User user = userOpt.get();
             Project project = projectOpt.get();
+            if (!project.getUsers().contains(user)) {
+                project.getUsers().add(user);
+                user.getProjects().add(project);
 
-            project.getUsers().add(user);
-            user.getProjects().add(project);
-
-            userRepository.save(user); // Save user to update the projects
-            projectRepository.save(project); // Save project to update the users
-
+                projectRepository.save(project); // Save project to update the users
+                System.out.println(project.getUsers().get(1).fullName());
+                userRepository.save(user); // Save user to update the projects
+            }
             return user.getId();
+
         } else {
             throw new IllegalArgumentException("User or Project not found");
         }
     }
 
-
-    public Integer updateProject(ProjectRequest request, Integer projectId){
+    public Integer updateProject(ProjectRequest request, Integer projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with ID: " + projectId));
         projectMapper.updateProject(project, request);
@@ -107,7 +110,7 @@ public class ProjectService {
         return updatedProject.getId();
     }
 
-    public Integer updateProjectStatus(String status, Integer projectId){
+    public Integer updateProjectStatus(String status, Integer projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Project not found with ID: " + projectId));
         projectMapper.updateProjectStatus(project, status);
